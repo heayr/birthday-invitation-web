@@ -43,7 +43,8 @@ export const submitRsvp = async (data: RsvpRequest): Promise<RsvpResponse> => {
 
 export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
   try {
-    const res = await api.get<RsvpResponse>(`/${code.replace(/^#/, "")}`)
+    // const cleanCode = code.startsWith('#') ? code.slice(1) : code
+    const res = await api.get<RsvpResponse>(`/${code}`);
     return res.data
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -57,7 +58,8 @@ export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
 
 export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Promise<RsvpResponse> => {
   try {
-    const res = await api.patch<RsvpResponse>(`/${code.replace(/^#/, "")}`, data)
+    // const cleanCode = code.startsWith('#') ? code.slice(1) : code
+    const res = await api.patch<RsvpResponse>(`/${code}`, data);
     return res.data
   } catch (err) {
     throw new Error("Не удалось обновить ответ")

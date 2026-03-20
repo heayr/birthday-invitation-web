@@ -16,6 +16,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
+// import { QRModal } from "@/components/QRModal";
+import QRModal from "@/components/QRModal";
 // import { submitRsvp, RsvpRequest, RsvpResponse } from "@/lib/api";
 import * as api from "@/lib/api";
 const { submitRsvp, RsvpRequest, RsvpResponse } = api;
@@ -43,6 +45,8 @@ type FormValues = z.infer<typeof rsvpSchema>;
 // Компонент
 // ────────────────────────────────────────────────
 export function RsvpForm() {
+  const [showQRModal, setShowQRModal] = useState(false);
+
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -134,6 +138,20 @@ export function RsvpForm() {
                     >
                       <Copy className="h-4 w-4" />
                     </Button>
+                    <Button
+                      size="lg"
+                      onClick={() => setShowQRModal(true)}
+                      className="mt-6"
+                    >
+                      Показать QR-коды
+                    </Button>
+
+                    <QRModal
+                      isOpen={showQRModal}
+                      onClose={() => setShowQRModal(false)}
+                      editLink={`${window.location.origin}/edit/${response.code}`}
+                      code={response.code}
+                    />
                   </div>
                   <p className="text-sm text-gray-500 mt-4">
                     Сохраните этот код — он понадобится, если захотите изменить
