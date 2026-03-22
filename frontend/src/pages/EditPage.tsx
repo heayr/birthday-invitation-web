@@ -1,19 +1,12 @@
 // src/pages/EditPage.tsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { RsvpFormBase } from "@/components/RsvpFormBase";
-import { getRsvpByCode } from "@/lib/api";
-import type { RsvpResponse, RsvpRequest } from "@/lib/api";
-// import { QRModal } from "@/components/QRModal";
+import { getRsvpByCode, updateRsvp } from "@/lib/api";
+import type { RsvpRequest } from "@/lib/api";
 import QRModal from "@/components/QRModal";
+import "./../styles//components/EditPage.css";
 
 export default function EditPage() {
   const { code } = useParams<{ code: string }>();
@@ -23,6 +16,10 @@ export default function EditPage() {
   const [error, setError] = useState<string | null>(null);
   const [initialData, setInitialData] = useState<RsvpRequest | null>(null);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
   useEffect(() => {
     if (!code) {
@@ -49,17 +46,26 @@ export default function EditPage() {
     fetchData();
   }, [code]);
 
-  const handleSubmit = async (data: any) => {
-    // Здесь можно добавить логику обновления
-    await updateRsvp(code!, data);
+  const handleSubmit = async (data: RsvpRequest) => {
+    if (!code) return;
+    setSubmitStatus("loading");
+    setSubmitMessage("");
+    try {
+      await updateRsvp(code, data);
+      setSubmitStatus("success");
+      setSubmitMessage("Ответ успешно обновлён!");
+    } catch (err: any) {
+      setSubmitStatus("error");
+      setSubmitMessage(err.message || "Не удалось обновить ответ");
+    }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary-600 mb-4" />
-          <p className="text-lg text-gray-600">Загрузка данных...</p>
+      <div className="edit-loading">
+        <div className="edit-loading-content">
+          <Loader2 className="edit-loading-spinner" />
+          <p className="edit-loading-text">Загрузка данных...</p>
         </div>
       </div>
     );
@@ -67,68 +73,67 @@ export default function EditPage() {
 
   if (error || !initialData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <Card className="max-w-md w-full">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-red-600">Ошибка</CardTitle>
-            <CardDescription className="text-lg mt-2">
-              {error || "Ответ с таким кодом не найден"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-6" />
-            <p className="mb-6 text-gray-600">
-              Возможно, код введён неверно или срок действия истёк.
-            </p>
-            <button
-              onClick={() => navigate("/")}
-              className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
-            >
-              Вернуться на главную
-            </button>
-          </CardContent>
-        </Card>
+      <div className="edit-error">
+        <div className="edit-error-card">
+          <h2 className="edit-error-title">Ошибка</h2>
+          <p className="edit-error-description">
+            {error || "Ответ с таким кодом не найден"}
+          </p>
+          <AlertCircle className="edit-error-icon" />
+          <p className="edit-error-message">
+            Возможно, код введён неверно или срок действия истёк.
+          </p>
+          <button onClick={() => navigate("/")} className="edit-error-button">
+            Вернуться на главную
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 md:py-16">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <Card className="border-primary-200 shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl md:text-4xl font-bold text-primary-700">
-              Редактирование ответа
-            </CardTitle>
-            <CardDescription className="text-lg mt-3">
-              Код:{" "}
-              <strong className="font-mono text-primary-600">{code}</strong>
-            </CardDescription>
-          </CardHeader>
+    <div className="edit-page">
+      <div className="edit-container">
+        <div className="edit-card">
+          <div className="edit-card-header">
+            <h1 className="edit-card-title">Редактирование ответа</h1>
+            <p className="edit-card-subtitle">
+              Код: <strong>{code}</strong>
+            </p>
+          </div>
 
-          <CardContent>
+          <div className="edit-card-content">
             <RsvpFormBase
               initialData={initialData}
               onSubmit={handleSubmit}
               submitLabel="Сохранить изменения"
-              successMessage="Ответ успешно обновлён!"
+              successMessage={
+                submitStatus === "success" ? submitMessage : undefined
+              }
+              errorMessage={
+                submitStatus === "error" ? submitMessage : undefined
+              }
               onCancel={() => navigate("/")}
+              isLoading={submitStatus === "loading"}
             />
 
-            <div className="mt-8 text-center">
-              <Button size="lg" onClick={() => setShowQRModal(true)}>
+            <div className="edit-qr-button-wrapper">
+              <button
+                className="edit-qr-button"
+                onClick={() => setShowQRModal(true)}
+              >
                 Показать QR-коды
-              </Button>
-
-              <QRModal
-                isOpen={showQRModal}
-                onClose={() => setShowQRModal(false)}
-                editLink={`${window.location.origin}/edit/${code}`}
-                code={code}
-              />
+              </button>
             </div>
-          </CardContent>
-        </Card>
+
+            <QRModal
+              isOpen={showQRModal}
+              onClose={() => setShowQRModal(false)}
+              editLink={`${window.location.origin}/edit/${code}`}
+              code={code || ""}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

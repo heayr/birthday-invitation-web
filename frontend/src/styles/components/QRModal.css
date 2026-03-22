@@ -1,0 +1,199 @@
+/* src/components/QRModal.css */
+
+/* Затемнение (оверлей) */
+.qr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .qr-modal-overlay {
+    padding: 1.5rem;
+  }
+}
+
+/* Модальное окно */
+.qr-modal {
+  position: relative;
+  background-color: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-elevated);
+  width: 100%;
+  max-width: 28rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: fadeInZoom 0.3s ease-out;
+  box-sizing: border-box;
+}
+
+/* Заголовок (sticky) */
+.qr-modal-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  z-index: 10;
+}
+
+.qr-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin: 0 0 0.25rem 0;
+}
+
+.qr-modal-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Контент */
+.qr-modal-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Секция с QR-кодом */
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.qr-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  text-align: center;
+  margin: 0;
+}
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-bg);
+  padding: 1rem;
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.qr-code {
+  max-width: 100%;
+  height: auto;
+  width: 220px;
+  display: block;
+}
+
+.qr-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 480px) {
+  .qr-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* Кнопки внутри модалки */
+.qr-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  background: transparent;
+  text-decoration: none;
+}
+
+.qr-button-outline {
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  background-color: transparent;
+}
+
+.qr-button-outline:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.qr-button-primary {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.qr-button-primary:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.qr-button-green {
+  background-color: #2e7d32;
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.qr-button-green:hover {
+  background-color: #1b5e20;
+}
+
+.qr-button-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: var(--transition);
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-button-close:hover {
+  color: var(--color-text-heading);
+}
+
+/* Текст подсказки */
+.qr-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* Анимация */
+@keyframes fadeInZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -56,10 +56,17 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
-    font-size: 16px; /* базовый для мобильных */
+    font-size: 16px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* главный защитник от горизонтального скролла */
+    width: 100%;
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
   @media (min-width: 640px) {
@@ -102,7 +109,8 @@
     min-height: 100svh;
     display: flex;
     flex-direction: column;
-    /* Убраны фиксированные рамки и max-width — адаптивность */
+    overflow-x: hidden; /* дополнительная защита */
+    width: 100%;
   }
 
   /* Универсальный контейнер */

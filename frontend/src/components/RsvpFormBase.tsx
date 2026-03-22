@@ -2,12 +2,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/cn";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import "./../styles/components/RsvpFormBase.css";
 
 const rsvpSchema = z.object({
   name: z.string().min(2, "Имя должно быть не короче 2 символов").max(100),
@@ -68,143 +64,169 @@ export function RsvpFormBase({
   });
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="rsvp-form">
       {/* Имя */}
-      <div className="space-y-2">
-        <Label htmlFor="name">Ваше имя *</Label>
-        <Input
+      <div className="form-field">
+        <label htmlFor="name" className="form-label form-label-required">
+          Ваше имя
+        </label>
+        <input
           id="name"
+          type="text"
+          className={`form-input ${form.formState.errors.name ? "error" : ""}`}
           placeholder="Иван Иванов"
           {...form.register("name")}
-          error={form.formState.errors.name?.message}
         />
+        {form.formState.errors.name && (
+          <p className="form-error-message">
+            {form.formState.errors.name.message}
+          </p>
+        )}
       </div>
 
       {/* Email */}
-      <div className="space-y-2">
-        <Label htmlFor="email">Email (необязательно)</Label>
-        <Input
+      <div className="form-field">
+        <label htmlFor="email" className="form-label">
+          Email (необязательно)
+        </label>
+        <input
           id="email"
           type="email"
+          className={`form-input ${form.formState.errors.email ? "error" : ""}`}
           placeholder="example@mail.com"
           {...form.register("email")}
-          error={form.formState.errors.email?.message}
         />
+        {form.formState.errors.email && (
+          <p className="form-error-message">
+            {form.formState.errors.email.message}
+          </p>
+        )}
       </div>
 
       {/* Присутствие */}
-      <div className="space-y-3">
-        <Label>Сможете ли присутствовать? *</Label>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button
+      <div className="form-field">
+        <span className="form-label form-label-required">
+          Сможете ли присутствовать?
+        </span>
+        <div className="attendance-buttons">
+          <button
             type="button"
-            variant={form.watch("attending") ? "default" : "outline"}
-            className={cn(
-              "flex-1",
-              form.watch("attending") && "bg-primary-600 hover:bg-primary-700",
-            )}
+            className={`attendance-button ${
+              form.watch("attending") ? "active-yes" : ""
+            }`}
             onClick={() => form.setValue("attending", true)}
           >
             Да, буду
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant={!form.watch("attending") ? "default" : "outline"}
-            className={cn(
-              "flex-1",
-              !form.watch("attending") &&
-                "bg-red-600 hover:bg-red-700 text-white",
-            )}
+            className={`attendance-button ${
+              !form.watch("attending") ? "active-no" : ""
+            }`}
             onClick={() => form.setValue("attending", false)}
           >
             Нет, не смогу
-          </Button>
+          </button>
         </div>
         {form.formState.errors.attending && (
-          <p className="text-sm text-red-600">
+          <p className="form-error-message">
             {form.formState.errors.attending.message}
           </p>
         )}
       </div>
 
       {/* +1 */}
-      <div className="space-y-2">
-        <Label htmlFor="plusOne">Сколько гостей с вами придёт? (+1)</Label>
-        <Input
+      <div className="form-field">
+        <label htmlFor="plusOne" className="form-label">
+          Сколько гостей с вами придёт? (+1)
+        </label>
+        <input
           id="plusOne"
           type="number"
           min={0}
           max={10}
+          className={`form-input ${form.formState.errors.plusOne ? "error" : ""}`}
           {...form.register("plusOne", { valueAsNumber: true })}
-          error={form.formState.errors.plusOne?.message}
         />
+        {form.formState.errors.plusOne && (
+          <p className="form-error-message">
+            {form.formState.errors.plusOne.message}
+          </p>
+        )}
       </div>
 
       {/* Алкоголь */}
-      <div className="space-y-2">
-        <Label htmlFor="alcohol">
+      <div className="form-field">
+        <label htmlFor="alcohol" className="form-label">
           Какой алкоголь будете пить? (можно указать несколько или ничего)
-        </Label>
-        <Input
+        </label>
+        <input
           id="alcohol"
+          type="text"
+          className={`form-input ${form.formState.errors.alcohol ? "error" : ""}`}
           placeholder="Вино, пиво, водка, ничего не пью..."
           {...form.register("alcohol")}
-          error={form.formState.errors.alcohol?.message}
         />
-        <p className="text-sm text-gray-500">
+        <p className="form-hint">
           Это поможет организаторам подготовить напитки
         </p>
+        {form.formState.errors.alcohol && (
+          <p className="form-error-message">
+            {form.formState.errors.alcohol.message}
+          </p>
+        )}
       </div>
 
       {/* Комментарий */}
-      <div className="space-y-2">
-        <Label htmlFor="comment">Комментарий / пожелания (необязательно)</Label>
-        <Textarea
+      <div className="form-field">
+        <label htmlFor="comment" className="form-label">
+          Комментарий / пожелания (необязательно)
+        </label>
+        <textarea
           id="comment"
-          placeholder="Например: буду с женой и ребёнком..."
+          className={`form-textarea ${form.formState.errors.comment ? "error" : ""}`}
+          placeholder="Например: буду с женой\мужем и ребёнком..."
           rows={4}
           {...form.register("comment")}
-          error={form.formState.errors.comment?.message}
         />
+        {form.formState.errors.comment && (
+          <p className="form-error-message">
+            {form.formState.errors.comment.message}
+          </p>
+        )}
       </div>
 
       {/* Кнопки */}
-      <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
-        <Button type="submit" size="lg" className="flex-1" disabled={isLoading}>
+      <div className="form-actions">
+        <button type="submit" className="btn-primary" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              <Loader2 className="spinner" size={20} />
               {submitLabel.includes("Сохран") ? "Сохранение..." : "Отправка..."}
             </>
           ) : (
             submitLabel
           )}
-        </Button>
+        </button>
 
         {onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="flex-1"
-            onClick={onCancel}
-          >
+          <button type="button" className="btn-outline" onClick={onCancel}>
             Отмена
-          </Button>
+          </button>
         )}
       </div>
 
       {/* Сообщения */}
       {successMessage && (
-        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-center text-green-700">
+        <div className="form-message form-message-success">
           {successMessage}
         </div>
       )}
 
       {errorMessage && (
-        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-          <p className="text-red-700">{errorMessage}</p>
+        <div className="form-message form-message-error">
+          <AlertCircle size={20} />
+          <p>{errorMessage}</p>
         </div>
       )}
     </form>

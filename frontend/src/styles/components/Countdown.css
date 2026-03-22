@@ -5,44 +5,70 @@
   width: 100%;
 }
 
-/* Горизонтальная сетка: блоки располагаются в ряд без переноса */
+/* Горизонтальная сетка: по умолчанию flex с переносом на маленьких экранах */
 .countdown-grid {
-  display: flex; /* flex-контейнер, по умолчанию flex-wrap: nowrap → все блоки в одну строку */
-  justify-content: center; /* выравнивание по центру */
-  gap: 2rem; /* расстояние между блоками на мобильных */
+  display: flex;
+  flex-wrap: wrap; /* перенос блоков, если не хватает места — избавляет от скролла */
+  justify-content: center;
+  gap: 1rem; /* уменьшаем отступы на мобилках */
+}
+
+/* На планшетах и выше возвращаем отсутствие переноса и увеличиваем gap */
+@media (min-width: 640px) {
+  .countdown-grid {
+    flex-wrap: nowrap; /* обратно в строку, когда достаточно места */
+    gap: 2rem;
+  }
 }
 
 @media (min-width: 768px) {
   .countdown-grid {
-    gap: 4rem; /* увеличиваем расстояние на планшетах и выше */
+    gap: 4rem; /* ещё больше на больших планшетах */
   }
 }
 
 /* Отдельный блок с цифрой и подписью */
 .countdown-block {
-  text-align: center; /* текст внутри блока по центру */
-  min-width: 120px; /* минимальная ширина блока — обеспечивает стабильность макета */
+  text-align: center;
+  flex: 1 0 auto; /* блок может растягиваться, но не сжиматься меньше содержимого */
+  min-width: 80px; /* уменьшаем минимальную ширину для мобилок, чтобы 4 блока влезли */
+}
+
+@media (min-width: 480px) {
+  .countdown-block {
+    min-width: 100px; /* на чуть более широких телефонах даём больше места */
+  }
+}
+
+@media (min-width: 640px) {
+  .countdown-block {
+    min-width: 120px; /* на планшетах и выше возвращаем исходную ширину */
+  }
 }
 
 /* Цифра (дни, часы, минуты, секунды) */
 .countdown-value {
-  font-size: 4.5rem; /* размер на мобилках */
-  font-weight: 700; /* жирное начертание */
-  color: var(--color-text-heading); /* цвет из глобальных переменных */
-  line-height: 1; /* плотная высота строки */
-  min-width: 2em; /* занимаем ширину под две цифры — исключает смещение при обновлении */
-  text-align: center; /* центрируем текст внутри блока */
-  font-variant-numeric: tabular-nums; /* моноширинные цифры — одинаковая ширина у всех символов */
+  font-size: 3rem; /* уменьшаем базовый размер для мобилок, чтобы всё помещалось */
+  font-weight: 700;
+  color: var(--color-text-heading);
+  line-height: 1;
+  min-width: 2em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Адаптив: увеличиваем цифры на планшетах */
+@media (min-width: 480px) {
+  .countdown-value {
+    font-size: 3.5rem;
+  }
+}
+
 @media (min-width: 768px) {
   .countdown-value {
     font-size: 6rem;
   }
 }
 
-/* Ещё больше на десктопе */
 @media (min-width: 1024px) {
   .countdown-value {
     font-size: 8rem;
@@ -51,16 +77,23 @@
 
 /* Подписи (дней, часов и т.д.) */
 .countdown-label {
-  font-size: 1rem;
+  font-size: 0.875rem; /* чуть меньше на мобилках */
   color: var(--color-text-muted);
-  margin-top: 1rem; /* отступ от цифры */
+  margin-top: 0.5rem; /* уменьшаем отступ от цифры */
   text-transform: uppercase;
-  letter-spacing: 0.05em; /* небольшой межбуквенный интервал */
+  letter-spacing: 0.05em;
 }
 
-/* На планшетах и выше увеличиваем размер подписей */
+@media (min-width: 480px) {
+  .countdown-label {
+    font-size: 1rem;
+    margin-top: 0.75rem;
+  }
+}
+
 @media (min-width: 768px) {
   .countdown-label {
     font-size: 1.125rem;
+    margin-top: 1rem;
   }
 }

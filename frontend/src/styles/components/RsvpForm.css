@@ -1,0 +1,262 @@
+/* src/sections/RsvpForm.css */
+
+/* ========== Основная секция ========== */
+.rsvp-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: var(--color-bg-light);
+}
+
+@media (min-width: 768px) {
+  .rsvp-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* ========== Контейнер ========== */
+.rsvp-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  max-width: 48rem; /* 768px — ограничиваем ширину для формы */
+}
+
+@media (min-width: 640px) {
+  .rsvp-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ========== Блок успеха после отправки ========== */
+.rsvp-success {
+  margin-top: 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .rsvp-success {
+    margin-top: 4rem;
+    gap: 2.5rem;
+  }
+}
+
+/* Баннер "Спасибо!" */
+.rsvp-success-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: #e8f5e9; /* светло-зеленый, в тёмной теме будет переопределен */
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  border: 1px solid #c8e6c9;
+  box-shadow: var(--shadow-soft);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rsvp-success-banner {
+    background-color: rgba(76, 175, 80, 0.15);
+    border-color: rgba(76, 175, 80, 0.3);
+  }
+}
+
+/* Иконка галочки */
+.rsvp-success-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #2e7d32;
+  flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rsvp-success-icon {
+    color: var(--color-accent);
+  }
+}
+
+/* Заголовок в баннере */
+.rsvp-success-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rsvp-success-title {
+    color: var(--color-accent);
+  }
+}
+
+@media (min-width: 768px) {
+  .rsvp-success-title {
+    font-size: 1.875rem;
+  }
+}
+
+/* Карточка с кодом */
+.rsvp-code-card {
+  background: var(--color-bg);
+  border-radius: 1rem;
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  width: 100%;
+  max-width: 32rem; /* ограничиваем ширину */
+  margin: 0 auto;
+  box-sizing: border-box;
+  text-align: center;
+  transition: var(--transition);
+}
+
+@media (prefers-color-scheme: dark) {
+  .rsvp-code-card {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Текст "Ваш код для редактирования" */
+.rsvp-code-label {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .rsvp-code-label {
+    font-size: 1.125rem;
+  }
+}
+
+/* Блок с самим кодом и кнопкой копирования */
+.rsvp-code-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background-color: var(--color-bg-light);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  font-family: monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+  flex-wrap: wrap; /* если не помещается на очень узких экранах */
+}
+
+@media (min-width: 480px) {
+  .rsvp-code-block {
+    font-size: 2.5rem;
+    gap: 1.5rem;
+  }
+}
+
+/* Сам код */
+.rsvp-code-value {
+  font-family: monospace;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+/* Кнопка копирования (используем классы от shadcn, но можем стилизовать при необходимости) */
+.rsvp-copy-button {
+  flex-shrink: 0;
+}
+
+/* Предупреждение сохранить код */
+.rsvp-code-note {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Кнопка "Показать QR-коды" */
+.rsvp-qr-button {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Адаптивные отступы для мобильных */
+@media (max-width: 640px) {
+  .rsvp-code-card {
+    padding: 1.5rem;
+  }
+  .rsvp-code-block {
+    padding: 1rem;
+    font-size: 1.5rem;
+  }
+}
+
+/* Кнопка для QR (аналогична другим кнопкам в секции) */
+.rsvp-qr-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.rsvp-qr-button:hover {
+  background-color: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+
+/* Кнопка копирования (иконка) */
+.rsvp-copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: 9999px;
+}
+
+.rsvp-copy-button:hover {
+  background-color: var(--color-bg-light);
+  color: var(--color-accent);
+}
+
+/* Блок ссылки (полный URL) */
+.rsvp-link-block {
+  background-color: var(--color-bg-light);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  word-break: break-all;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.rsvp-link-block a {
+  color: var(--color-accent);
+  text-decoration: none;
+}

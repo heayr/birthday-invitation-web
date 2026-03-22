@@ -9,7 +9,8 @@ export function Cover() {
       <div className="cover-texture">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#388e3c15,transparent_70%)]" />
       </div>
-
+      {/* Фоновое изображение */}
+      <div className="cover-image" />
       <div className="cover-content">
         <h1 className="cover-title">Приглашение на юбилей</h1>
 

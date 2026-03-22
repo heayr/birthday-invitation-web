@@ -1,0 +1,167 @@
+/* src/sections/InfoSection.css */
+
+/* ========== Основная секция ========== */
+.info-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: var(--color-bg-light);
+}
+
+@media (min-width: 768px) {
+  .info-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* ========== Контейнер для центрирования и отступов ========== */
+.info-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .info-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .info-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ========== Внутренний враппер для ограничения ширины ========== */
+.info-wrapper {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========== Заголовок ========== */
+.info-title {
+  font-size: 2rem; /* 32px */
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text-heading);
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .info-title {
+    font-size: 3rem; /* 48px */
+    margin-bottom: 4rem;
+  }
+}
+
+/* ========== Сетка карточек ========== */
+.info-grid {
+  display: grid;
+  gap: 2rem;
+  /* По умолчанию 1 колонка */
+  grid-template-columns: 1fr;
+}
+
+/* На планшетах 2 колонки */
+@media (min-width: 768px) {
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* На десктопе 4 колонки */
+@media (min-width: 1024px) {
+  .info-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* ========== Карточка ========== */
+.info-card {
+  background: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition);
+  text-align: center;
+  overflow: hidden;
+  /* гарантируем, что содержимое не вылезет */
+  min-width: 0;
+}
+
+.info-card:hover {
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-4px);
+}
+
+/* ========== Верхняя часть карточки (заголовок с иконкой) ========== */
+.info-card-header {
+  padding: 1.5rem 1rem 0.5rem 1rem;
+}
+
+/* Круглая подложка для иконки */
+.info-icon-wrapper {
+  width: 4rem; /* 64px */
+  height: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+  background-color: var(--color-accent-light);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8; /* для светлой темы, в тёмной будет свой цвет */
+}
+
+/* Иконка внутри круга */
+.info-icon-wrapper svg {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-accent-dark);
+  stroke-width: 1.75;
+}
+
+/* Заголовок карточки */
+.info-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin: 0 0 0.5rem 0;
+}
+
+/* ========== Тело карточки (содержимое) ========== */
+.info-card-content {
+  padding: 0 1rem 1.5rem 1rem;
+}
+
+.info-main-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.info-sub-text {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Тёмная тема — адаптируем цвета кругов и иконок */
+@media (prefers-color-scheme: dark) {
+  .info-icon-wrapper {
+    background-color: rgba(76, 175, 80, 0.2);
+  }
+  .info-icon-wrapper svg {
+    color: var(--color-accent);
+  }
+}

@@ -1,0 +1,99 @@
+/* src/sections/EditRsvpForm.css */
+
+/* ========== Общий контейнер ========== */
+.edit-rsvp {
+  width: 100%;
+  max-width: 48rem; /* 768px — ограничиваем ширину для формы */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space-y-8 */
+  box-sizing: border-box;
+}
+
+/* ========== Блок успеха ========== */
+.edit-rsvp-success {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* Баннер успеха */
+.edit-rsvp-success-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-soft);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-rsvp-success-banner {
+    background-color: rgba(76, 175, 80, 0.15);
+    border-color: rgba(76, 175, 80, 0.3);
+  }
+}
+
+/* Иконка галочки */
+.edit-rsvp-success-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #2e7d32;
+  flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-rsvp-success-icon {
+    color: var(--color-accent);
+  }
+}
+
+/* Текст сообщения */
+.edit-rsvp-success-message {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .edit-rsvp-success-message {
+    font-size: 1.875rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-rsvp-success-message {
+    color: var(--color-accent);
+  }
+}
+
+/* Кнопка показа QR-кодов */
+.edit-rsvp-qr-button {
+  width: 100%;
+  max-width: 28rem; /* ограничиваем ширину на больших экранах */
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 640px) {
+  .edit-rsvp-success-banner {
+    padding: 1rem 1.5rem;
+  }
+  .edit-rsvp-success-message {
+    font-size: 1.25rem;
+  }
+  .edit-rsvp-success-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+}

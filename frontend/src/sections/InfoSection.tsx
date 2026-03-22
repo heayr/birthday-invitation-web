@@ -1,70 +1,76 @@
 // src/sections/InfoSection.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Calendar, MapPin, Shirt, UtensilsCrossed } from "lucide-react";
-import { cn } from "@/lib/cn";
+import "./../styles/components/InfoSection.css";
 
 export function InfoSection() {
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-16">
-          Информация о событии
-        </h2>
+    <section className="info-section">
+      <div className="info-container">
+        <div className="info-wrapper">
+          <h2 className="info-title">Информация о событии</h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-2">
-              <div className="mx-auto w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <Calendar className="w-8 h-8 text-primary-600" />
+          <div className="info-grid">
+            {/* Карточка: Дата и время */}
+            <div className="info-card">
+              <div className="info-card-header">
+                <div className="info-icon-wrapper">
+                  <Calendar aria-hidden="true" />
+                </div>
+                <h3 className="info-card-title">Дата и время</h3>
               </div>
-              <CardTitle className="text-xl">Дата и время</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg font-medium">29 мая 2026</p>
-              <p className="text-gray-600">17:00 – 23:00</p>
-            </CardContent>
-          </Card>
+              <div className="info-card-content">
+                <p className="info-main-text">30 мая 2026</p>
+                <p className="info-sub-text">17:00 – 23:00</p>
+              </div>
+            </div>
 
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-2">
-              <div className="mx-auto w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <MapPin className="w-8 h-8 text-primary-600" />
+            {/* Карточка: Место */}
+            <div className="info-card">
+              <div className="info-card-header">
+                <div className="info-icon-wrapper">
+                  <MapPin aria-hidden="true" />
+                </div>
+                <h3 className="info-card-title">Место</h3>
               </div>
-              <CardTitle className="text-xl">Место</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg font-medium">Балаково</p>
-              <p className="text-gray-600">Будет объявлено ближе к дате</p>
-            </CardContent>
-          </Card>
+              <div className="info-card-content">
+                <p className="info-main-text">Балаково</p>
+                <p className="info-sub-text">
+                  Кафе «Золотой Ключик» <br />
+                  просп. Героев, 36/2, ТЦ Айсберг
+                </p>
+              </div>
+            </div>
 
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-2">
-              <div className="mx-auto w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <Shirt className="w-8 h-8 text-primary-600" />
+            {/* Карточка: Дресс-код */}
+            <div className="info-card">
+              <div className="info-card-header">
+                <div className="info-icon-wrapper">
+                  <Shirt aria-hidden="true" />
+                </div>
+                <h3 className="info-card-title">Дресс-код</h3>
               </div>
-              <CardTitle className="text-xl">Дресс-код</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg font-medium">Уточняется</p>
-              <p className="text-gray-600">Будет объявлено позже</p>
-            </CardContent>
-          </Card>
+              <div className="info-card-content">
+                <p className="info-main-text">Уточняется</p>
+                <p className="info-sub-text">Будет объявлено позже</p>
+              </div>
+            </div>
 
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-2">
-              <div className="mx-auto w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <UtensilsCrossed className="w-8 h-8 text-primary-600" />
+            {/* Карточка: Формат */}
+            <div className="info-card">
+              <div className="info-card-header">
+                <div className="info-icon-wrapper">
+                  <UtensilsCrossed aria-hidden="true" />
+                </div>
+                <h3 className="info-card-title">Формат</h3>
               </div>
-              <CardTitle className="text-xl">Формат</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg font-medium">Фуршет</p>
-              <p className="text-gray-600">
-                Лёгкие закуски, общение, хорошее настроение
-              </p>
-            </CardContent>
-          </Card>
+              <div className="info-card-content">
+                <p className="info-main-text">Фуршет</p>
+                <p className="info-sub-text">
+                  Лёгкие закуски, общение, хорошее настроение
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

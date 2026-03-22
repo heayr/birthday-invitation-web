@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  overflow: hidden;
   background: linear-gradient(
     to bottom right,
     var(--color-bg),
@@ -15,11 +16,24 @@
   );
 }
 
+/* Новый слой с фоновым изображением */
+.cover-image {
+  position: absolute;
+  inset: 0;
+  background-image: url("/head-pic.jpg"); /* путь к изображению в папке public */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; /* регулируйте прозрачность, чтобы не перебивать текст */
+  z-index: 1;
+}
+/* Текстура (градиент) остаётся поверх изображения */
 .cover-texture {
   position: absolute;
   inset: 0;
-  opacity: 0.04;
+  opacity: 1;
   pointer-events: none;
+  z-index: 2;
 }
 
 .cover-content {
@@ -27,15 +41,23 @@
   z-index: 10;
   width: 100%;
   max-width: 1280px;
-  padding: 2rem 1.5rem;
+  padding: 2rem 1rem; /* уменьшаем горизонтальные отступы на мобилках */
   text-align: center;
+  box-sizing: border-box; /* чтобы padding не увеличивал ширину */
+}
+
+@media (min-width: 640px) {
+  .cover-content {
+    padding: 2rem 1.5rem;
+  }
 }
 
 .cover-title {
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--color-text-heading);
+  color: var(--color-bg-light);
+  /* color: rgb(255, 255, 255); */
   animation: fadeInUp 0.8s ease-out forwards;
 }
 

@@ -1,0 +1,210 @@
+/* src/pages/EditPage.css */
+
+/* ========== Страница редактирования ========== */
+.edit-page {
+  min-height: 100vh;
+  background-color: var(--color-bg-light);
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .edit-page {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* ========== Контейнер ========== */
+.edit-container {
+  width: 100%;
+  max-width: 48rem; /* 768px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .edit-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ========== Карточка ========== */
+.edit-card {
+  background: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-elevated);
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-card {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.edit-card-header {
+  text-align: center;
+  padding: 2rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.05));
+}
+
+.edit-card-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .edit-card-title {
+    font-size: 2.25rem;
+  }
+}
+
+.edit-card-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.edit-card-subtitle strong {
+  font-family: monospace;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.edit-card-content {
+  padding: 2rem 1.5rem;
+}
+
+/* ========== Блок загрузки ========== */
+.edit-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-light);
+}
+
+.edit-loading-content {
+  text-align: center;
+}
+
+.edit-loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+  color: var(--color-accent);
+}
+
+.edit-loading-text {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+}
+
+/* ========== Блок ошибки ========== */
+.edit-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-light);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.edit-error-card {
+  max-width: 28rem;
+  width: 100%;
+  background: var(--color-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  padding: 2rem;
+}
+
+.edit-error-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin: 0 0 0.5rem 0;
+}
+
+.edit-error-description {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.edit-error-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #dc2626;
+  margin: 1rem auto;
+}
+
+.edit-error-message {
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+}
+
+.edit-error-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-error-button:hover {
+  background-color: var(--color-accent-dark);
+}
+
+/* ========== QR кнопка внизу карточки ========== */
+.edit-qr-button-wrapper {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.edit-qr-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-qr-button:hover {
+  background-color: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+
+/* ========== Анимация спиннера ========== */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

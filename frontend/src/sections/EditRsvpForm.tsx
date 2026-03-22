@@ -4,8 +4,9 @@ import { updateRsvp } from "@/lib/api";
 import type { RsvpRequest } from "@/lib/api";
 import { RsvpFormBase } from "@/components/RsvpFormBase";
 import QRModal from "@/components/QRModal";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; // если Button ещё используется в проекте, но в этом компоненте мы его заменим на кастомный? — оставляем как есть или перепишем? Лучше заменить на кастомную кнопку для единообразия.
 import { CheckCircle2 } from "lucide-react";
+import "./../styles/components/EditRsvpForm.css";
 
 interface EditRsvpFormProps {
   initialData: RsvpRequest;
@@ -33,7 +34,7 @@ export function EditRsvpForm({ initialData, code }: EditRsvpFormProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="edit-rsvp">
       <RsvpFormBase
         initialData={initialData}
         onSubmit={handleSubmit}
@@ -44,19 +45,21 @@ export function EditRsvpForm({ initialData, code }: EditRsvpFormProps) {
       />
 
       {status === "success" && (
-        <div className="text-center space-y-8">
-          <div className="inline-flex items-center justify-center gap-4 bg-green-50 px-8 py-6 rounded-2xl border border-green-200 shadow-sm">
-            <CheckCircle2 className="w-10 h-10 text-green-600" />
-            <h3 className="text-2xl font-bold text-green-800">{message}</h3>
+        <div className="edit-rsvp-success">
+          <div className="edit-rsvp-success-banner">
+            <CheckCircle2 className="edit-rsvp-success-icon" />
+            <h3 className="edit-rsvp-success-message">{message}</h3>
           </div>
 
-          <Button
-            size="lg"
-            className="w-full max-w-md"
-            onClick={() => setShowQRModal(true)}
-          >
-            Показать QR-коды и добавить в календарь
-          </Button>
+          <div className="edit-rsvp-qr-button">
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={() => setShowQRModal(true)}
+            >
+              Показать QR-коды и добавить в календарь
+            </Button>
+          </div>
 
           <QRModal
             isOpen={showQRModal}
