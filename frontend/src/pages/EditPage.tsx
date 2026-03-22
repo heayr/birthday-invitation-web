@@ -9,9 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { EditRsvpForm } from "@/sections/EditRsvpForm";
+import { RsvpFormBase } from "@/components/RsvpFormBase";
 import { getRsvpByCode } from "@/lib/api";
 import type { RsvpResponse, RsvpRequest } from "@/lib/api";
+// import { QRModal } from "@/components/QRModal";
+import QRModal from "@/components/QRModal";
 
 export default function EditPage() {
   const { code } = useParams<{ code: string }>();
@@ -20,6 +22,7 @@ export default function EditPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [initialData, setInitialData] = useState<RsvpRequest | null>(null);
+  const [showQRModal, setShowQRModal] = useState(false);
 
   useEffect(() => {
     if (!code) {
@@ -28,19 +31,11 @@ export default function EditPage() {
       return;
     }
 
-    // const cleanCode = code.startsWith("#") ? code.slice(1) : code;
-
     const fetchData = async () => {
       try {
-        const res = await getRsvpByCode(code!);
+        const res = await getRsvpByCode(code);
         if (res.success && res.data) {
-          setInitialData({
-            name: res.data.name,
-            email: res.data.email,
-            attending: res.data.attending,
-            plusOne: res.data.plusOne,
-            comment: res.data.comment || "",
-          });
+          setInitialData(res.data);
         } else {
           setError(res.message || "Ответ не найден");
         }
@@ -53,6 +48,11 @@ export default function EditPage() {
 
     fetchData();
   }, [code]);
+
+  const handleSubmit = async (data: any) => {
+    // Здесь можно добавить логику обновления
+    await updateRsvp(code!, data);
+  };
 
   if (loading) {
     return (
@@ -107,7 +107,26 @@ export default function EditPage() {
           </CardHeader>
 
           <CardContent>
-            <EditRsvpForm initialData={initialData} code={code!} />
+            <RsvpFormBase
+              initialData={initialData}
+              onSubmit={handleSubmit}
+              submitLabel="Сохранить изменения"
+              successMessage="Ответ успешно обновлён!"
+              onCancel={() => navigate("/")}
+            />
+
+            <div className="mt-8 text-center">
+              <Button size="lg" onClick={() => setShowQRModal(true)}>
+                Показать QR-коды
+              </Button>
+
+              <QRModal
+                isOpen={showQRModal}
+                onClose={() => setShowQRModal(false)}
+                editLink={`${window.location.origin}/edit/${code}`}
+                code={code}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>

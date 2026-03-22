@@ -1,0 +1,66 @@
+/* src/components/Countdown.css */
+
+/* Обёртка таймера — занимает всю доступную ширину */
+.countdown {
+  width: 100%;
+}
+
+/* Горизонтальная сетка: блоки располагаются в ряд без переноса */
+.countdown-grid {
+  display: flex; /* flex-контейнер, по умолчанию flex-wrap: nowrap → все блоки в одну строку */
+  justify-content: center; /* выравнивание по центру */
+  gap: 2rem; /* расстояние между блоками на мобильных */
+}
+
+@media (min-width: 768px) {
+  .countdown-grid {
+    gap: 4rem; /* увеличиваем расстояние на планшетах и выше */
+  }
+}
+
+/* Отдельный блок с цифрой и подписью */
+.countdown-block {
+  text-align: center; /* текст внутри блока по центру */
+  min-width: 120px; /* минимальная ширина блока — обеспечивает стабильность макета */
+}
+
+/* Цифра (дни, часы, минуты, секунды) */
+.countdown-value {
+  font-size: 4.5rem; /* размер на мобилках */
+  font-weight: 700; /* жирное начертание */
+  color: var(--color-text-heading); /* цвет из глобальных переменных */
+  line-height: 1; /* плотная высота строки */
+  min-width: 2em; /* занимаем ширину под две цифры — исключает смещение при обновлении */
+  text-align: center; /* центрируем текст внутри блока */
+  font-variant-numeric: tabular-nums; /* моноширинные цифры — одинаковая ширина у всех символов */
+}
+
+/* Адаптив: увеличиваем цифры на планшетах */
+@media (min-width: 768px) {
+  .countdown-value {
+    font-size: 6rem;
+  }
+}
+
+/* Ещё больше на десктопе */
+@media (min-width: 1024px) {
+  .countdown-value {
+    font-size: 8rem;
+  }
+}
+
+/* Подписи (дней, часов и т.д.) */
+.countdown-label {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-top: 1rem; /* отступ от цифры */
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* небольшой межбуквенный интервал */
+}
+
+/* На планшетах и выше увеличиваем размер подписей */
+@media (min-width: 768px) {
+  .countdown-label {
+    font-size: 1.125rem;
+  }
+}

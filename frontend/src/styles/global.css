@@ -1,0 +1,179 @@
+/* src/styles/global.css */
+
+/* 1. Подключаем Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Глобальные переменные */
+:root {
+  --color-bg: #fdfcfb;
+  --color-bg-light: #f9f5f0;
+  --color-bg-accent: #fff9e6;
+
+  --color-text: #2d1e1e;
+  --color-text-muted: #5c4a4a;
+  --color-text-heading: #1a1a1a;
+
+  --color-accent: #1b5e20; /* глубокий изумруд */
+  --color-accent-dark: #0f4a1a;
+  --color-accent-light: #388e3c;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-heading: "Inter", system-ui, sans-serif;
+
+  --shadow-soft:
+    0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 5px 10px -5px rgba(0, 0, 0, 0.05);
+  --shadow-elevated:
+    0 20px 35px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.08);
+
+  --transition: all 0.3s ease;
+}
+
+/* Тёмная тема */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f0f0f;
+    --color-bg-light: #1a1a1a;
+    --color-bg-accent: #222222;
+
+    --color-text: #e5e5e5;
+    --color-text-muted: #a0a0a0;
+    --color-text-heading: #ffffff;
+
+    --color-accent: #4caf50;
+    --color-accent-dark: #388e3c;
+    --color-accent-light: #66bb6a;
+  }
+}
+
+/* 3. Базовые стили и сбросы */
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 16px; /* базовый для мобильных */
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (min-width: 640px) {
+    html,
+    body {
+      font-size: 17px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    html,
+    body {
+      font-size: 18px;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-text-heading);
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  #root {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    /* Убраны фиксированные рамки и max-width — адаптивность */
+  }
+
+  /* Универсальный контейнер */
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+}
+
+/* 4. Кастомные утилиты и анимации */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+  .animate-card {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .hover-scale {
+    transition: var(--transition);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.03);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

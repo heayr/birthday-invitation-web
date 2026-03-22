@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { Cover } from "@/sections/Cover";
 import { CountdownSection } from "@/sections/CountdownSection";
 import { InfoSection } from "@/sections/InfoSection";
-import { RsvpForm } from "@/components/RsvpForm"; // ← твоя форма лежит здесь
+import { RsvpForm } from "@/sections/RsvpForm";
 
 // Страницы
 import EditPage from "@/pages/EditPage";
@@ -15,7 +15,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white">
       <Routes>
-        {/* Главная страница — корневой маршрут */}
+        {/* Главная страница */}
         <Route
           path="/"
           element={
@@ -24,8 +24,7 @@ export default function App() {
               <CountdownSection />
               <InfoSection />
               <RsvpForm />
-
-              {/* Футер — общий для всей главной страницы */}
+              {/* Футер */}
               <footer className="py-12 bg-gray-900 text-gray-300 text-center">
                 <p>С любовью и теплом ❤️</p>
                 <p className="mt-2 text-sm">2026 © Юбилей Виталия</p>
@@ -34,10 +33,10 @@ export default function App() {
           }
         />
 
-        {/* Страница редактирования по коду */}
+        {/* Редактирование */}
         <Route path="/edit/:code" element={<EditPage />} />
 
-        {/* Все остальные маршруты → 404 */}
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

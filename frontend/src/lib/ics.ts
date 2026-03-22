@@ -7,52 +7,39 @@ interface EventData {
   location?: string
   startDate: Date
   endDate?: Date
-  organizerName?: string
-  organizerEmail?: string
 }
 
 /**
  * Генерирует строку в формате iCalendar (.ics)
- * @returns string — содержимое .ics файла
  */
 export function generateICS(data: EventData): string {
   const {
     summary,
     description = "",
-    location = "Балаково (точный адрес будет объявлен ближе к дате)",
+    location = "",
     startDate,
-    endDate = new Date(startDate.getTime() + 6 * 60 * 60 * 1000), // по умолчанию +6 часов
-    organizerName = "Организаторы юбилея Виталия",
-    organizerEmail = "",
+    endDate = new Date(startDate.getTime() + 6 * 60 * 60 * 1000), // +6 часов по умолчанию
   } = data
 
-  // Форматируем дату в iCal-формат (UTC, без миллисекунд)
-  const formatDate = (date: Date) => {
-    return date.toISOString().replace(/-|:|\.\d{3}/g, "").slice(0, -1) + "Z"
-  }
+  const formatDate = (date: Date) =>
+    date.toISOString().replace(/-|:|\.\d{3}/g, "").slice(0, -1) + "Z"
 
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Grok xAI//Birthday Invitation//RU",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
     "BEGIN:VEVENT",
-    `UID:${Date.now()}@vitaliy-jubilee-2026`,
+    `UID:${Date.now()}@vitaliy-jubilee`,
     `DTSTAMP:${formatDate(new Date())}`,
     `DTSTART:${formatDate(startDate)}`,
     `DTEND:${formatDate(endDate)}`,
     `SUMMARY:${summary.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
     `DESCRIPTION:${description.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
-    `LOCATION:${location.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
-    organizerEmail
-      ? `ORGANIZER;CN=${organizerName}:mailto:${organizerEmail}`
-      : `ORGANIZER;CN=${organizerName}`,
+    location ? `LOCATION:${location.replace(/\n/g, "\\n").replace(/,/g, "\\,")}` : "",
     "END:VEVENT",
     "END:VCALENDAR",
   ]
 
-  return lines.join("\r\n")
+  return lines.join("\r\n").trim()
 }
 
 /**

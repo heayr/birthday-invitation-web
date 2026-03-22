@@ -9,6 +9,7 @@ export class RsvpService {
     email: string;
     attending: boolean;
     plusOne: number;
+    alcohol: data.alcohol,
     comment?: string;
   }): Promise<Rsvp> {
     const code = this.generateUniqueCode();
@@ -32,6 +33,7 @@ export class RsvpService {
       email?: string;
       attending?: boolean;
       plusOne?: number;
+      alcohol: data.alcohol,
       comment?: string;
     }
   ): Promise<Rsvp> {
@@ -59,6 +61,6 @@ export class RsvpService {
     for (let i = 0; i < 8; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    return `#${code}`;
+    return code;
   }
 }

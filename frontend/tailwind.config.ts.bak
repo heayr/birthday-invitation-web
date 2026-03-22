@@ -1,0 +1,119 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "media", // автоматически по системным настройкам (можно сменить на "class")
+  theme: {
+    extend: {
+      colors: {
+        // Винный / бордовый — основной акцент (кнопки, заголовки, hover)
+        wine: {
+          50:  '#fdf2f2',
+          100: '#fde8e8',
+          200: '#f9d1d1',
+          300: '#f4a8a8',
+          400: '#ef7d7d',
+          500: '#e74c3c',
+          600: '#c0392b',
+          700: '#96281b',
+          800: '#7f1d1d',
+          900: '#641919',
+        },
+
+        // Шампань / золото — вторичный акцент (иконки, рамки, выделения)
+        champagne: {
+          50:  '#fffdf5',
+          100: '#fff9e6',
+          200: '#fff2c7',
+          300: '#ffe89b',
+          400: '#fdd86e',
+          500: '#d4af37',
+          600: '#b8962e',
+          700: '#9b7d25',
+          800: '#7f641c',
+          900: '#664f17',
+        },
+
+        // Кремовый / очень светлый беж — фон, карточки
+        cream: {
+          50:  '#fdfcfb',
+          100: '#f9f5f0',
+          200: '#f5f0e6',
+          300: '#efe8d9',
+          400: '#e8dfc8',
+          500: '#e0d5b5',
+          600: '#c9b89c',
+          700: '#b19c83',
+          800: '#9a806a',
+          900: '#826451',
+        },
+
+        // Нейтральные цвета (текст, границы)
+        gray: {
+          50:  '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+        },
+      },
+
+      fontFamily: {
+        sans:    ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Cinzel', 'Georgia', 'serif'],
+        mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+      },
+
+      // Анимации появления (fade-in-up и т.д.)
+      animation: {
+        'fade-in':      'fadeIn 0.6s ease-out forwards',
+        'fade-in-up':   'fadeInUp 0.8s ease-out forwards',
+        'fade-in-down': 'fadeInDown 0.8s ease-out forwards',
+        'scale-in':     'scaleIn 0.5s ease-out forwards',
+      },
+
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInDown: {
+          '0%': { opacity: '0', transform: 'translateY(-20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
+
+      // Улучшенные тени для карточек и модалок
+      boxShadow: {
+        'soft': '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 5px 10px -5px rgba(0, 0, 0, 0.05)',
+        'elevated': '0 20px 35px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.08)',
+      },
+
+      // Улучшенные border-radius
+      borderRadius: {
+        '2xl': '1.25rem',
+        '3xl': '1.5rem',
+      },
+    },
+  },
+
+  plugins: [
+    require('@tailwindcss/typography'),     // для красивого текста
+    require('tailwindcss-animate'),         // для animate-* классов
+  ],
+}

@@ -1,0 +1,61 @@
+/* src/sections/CountdownSection.css */
+
+/* ========== Основная секция ========== */
+.countdown-section {
+  padding-top: 6rem; /* вертикальные отступы на мобильных устройствах */
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  .countdown-section {
+    padding-top: 8rem; /* увеличиваем отступы на планшетах и выше */
+    padding-bottom: 8rem;
+  }
+}
+
+/* ========== Контейнер для центрирования и боковых отступов ========== */
+.countdown-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* отступы по бокам на мобилках */
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .countdown-container {
+    padding-left: 1.5rem; /* увеличиваем отступы на маленьких планшетах */
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .countdown-container {
+    padding-left: 2rem; /* максимальные отступы на десктопе */
+    padding-right: 2rem;
+  }
+}
+
+/* ========== Внутренний враппер — ограничивает ширину контента ========== */
+.countdown-wrapper {
+  max-width: 64rem; /* максимальная ширина контента (1024px) */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; /* центрируем заголовок */
+}
+
+/* ========== Заголовок «До юбилея осталось» ========== */
+.countdown-title {
+  font-size: 1.875rem; /* размер на мобилках (30px) */
+  font-weight: 600; /* полужирный */
+  color: var(--color-text-muted); /* цвет из глобальных переменных */
+  margin-bottom: 5rem; /* большой отступ до таймера, создаёт воздух */
+}
+
+@media (min-width: 768px) {
+  .countdown-title {
+    font-size: 5rem; /* увеличиваем на планшетах (36px) */
+    margin-bottom: 5rem; /* сохраняем отступ */
+    font-weight: 600; /* сохраняем насыщенность */
+  }
+}

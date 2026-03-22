@@ -1,57 +1,16 @@
 // src/components/QRModal.tsx
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
-import { X, Link as LinkIcon, Download, Calendar } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useEffect } from "react";
+import { generateICS, downloadICS } from "@/lib/ics";
+import { X, Link as LinkIcon, Download, Calendar } from "lucide-react";
 
-// ────────────────────────────────────────────────
-// Генерация .ics прямо в компоненте (DRY: можно вынести позже)
-// ────────────────────────────────────────────────
-const generateICS = (): string => {
-  const summary = "Юбилей Виталия — 50 лет";
-  const description =
-    "Приглашаем на юбилей Виталия!\n\nКод для редактирования: [будет показан после отправки]\n\nЖдём всех в хорошем настроении!";
-  const location = "Балаково (точный адрес объявим ближе к дате)";
-  const start = new Date("2026-05-29T17:00:00+04:00"); // Балаково — UTC+4
-  const end = new Date("2026-05-29T23:00:00+04:00");
-
-  const formatDate = (date: Date) =>
-    date
-      .toISOString()
-      .replace(/-|:|\.\d{3}/g, "")
-      .slice(0, -1) + "Z";
-
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Grok xAI//Jubilee Invitation//RU",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VEVENT",
-    `UID:${Date.now()}@vitaliy-jubilee`,
-    `DTSTAMP:${formatDate(new Date())}`,
-    `DTSTART:${formatDate(start)}`,
-    `DTEND:${formatDate(end)}`,
-    `SUMMARY:${summary.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
-    `DESCRIPTION:${description.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
-    `LOCATION:${location.replace(/\n/g, "\\n").replace(/,/g, "\\,")}`,
-    "ORGANIZER;CN=Организаторы юбилея:",
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ];
-
-  return lines.join("\r\n");
-};
-
-// ────────────────────────────────────────────────
-// Компонент
-// ────────────────────────────────────────────────
 interface QRModalProps {
   isOpen: boolean;
   onClose: () => void;
-  editLink: string; // https://.../edit/КОД
-  code: string; // чистый код без #
+  editLink: string;
+  code: string;
 }
 
 export default function QRModal({
@@ -60,6 +19,36 @@ export default function QRModal({
   editLink,
   code,
 }: QRModalProps) {
+  if (!isOpen) return null;
+
+  const handleBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  const downloadQR = (value: string, filename: string) => {
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(value)}`;
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleAddToCalendar = () => {
+    const icsContent = generateICS({
+      summary: "Юбилей Виталия — 50 лет",
+      description: `Приглашаем на юбилей Виталия!\n\nКод для редактирования: ${code}\n\nЕсли будут пожелания или изменения — используйте код.`,
+      location:
+        "Кафе «Золотой Ключик», просп. Героев, 36/2, Балаково, ТЦ Айсберг",
+      startDate: new Date("2026-05-30T17:00:00+04:00"),
+      endDate: new Date("2026-05-30T23:00:00+04:00"),
+      organizerName: "Организаторы юбилея",
+    });
+    downloadICS(icsContent, "jubilee-vitaliy-2026.ics");
+  };
+
   // Закрытие по Esc
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -68,38 +57,6 @@ export default function QRModal({
     if (isOpen) window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  // Скачивание QR как PNG (через внешний API — надёжно и быстро)
-  const downloadQR = (value: string, filename: string) => {
-    const url = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(value)}`;
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    link.target = "_blank"; // безопасность
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Скачивание .ics
-  const downloadICS = () => {
-    const content = generateICS();
-    const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "jubilee-vitaliy-2026.ics";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  };
 
   return (
     <div
@@ -161,7 +118,7 @@ export default function QRModal({
             </div>
           </div>
 
-          {/* Блок календаря — только кнопка */}
+          {/* Календарь — только кнопка */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-center">
               Добавить в календарь
@@ -171,7 +128,7 @@ export default function QRModal({
                 variant="default"
                 size="lg"
                 className="w-full bg-green-600 hover:bg-green-700 text-white"
-                onClick={downloadICS}
+                onClick={handleAddToCalendar}
               >
                 <Calendar className="w-5 h-5 mr-2" />
                 Добавить в календарь (.ics)

@@ -1,0 +1,76 @@
+/* src/styles/components/Cover.css */
+
+.cover-section {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom right,
+    var(--color-bg),
+    var(--color-bg-light),
+    var(--color-bg-accent)
+  );
+}
+
+.cover-texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1280px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.cover-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text-heading);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.cover-subtitle {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 600;
+  color: var(--color-accent);
+  animation: fadeInUp 0.8s ease-out forwards 0.2s;
+  animation-fill-mode: both;
+}
+
+.cover-date {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 500;
+  color: var(--color-text);
+  animation: fadeInUp 0.8s ease-out forwards 0.4s;
+  animation-fill-mode: both;
+}
+
+.cover-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 2.5rem;
+  background: var(--color-accent);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-elevated);
+  transition: var(--transition);
+}
+
+.cover-button:hover {
+  background: var(--color-accent-dark);
+  box-shadow: var(--shadow-elevated);
+  transform: scale(1.03);
+}

@@ -10,9 +10,10 @@ const api = axios.create({
 
 export interface RsvpRequest {
   name: string
-  email: string
+  email?: string
   attending: boolean
   plusOne: number
+  alcohol?: string
   comment?: string
 }
 

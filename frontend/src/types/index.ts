@@ -1,8 +1,9 @@
 export interface RsvpFormData {
   name: string
-  email: string
+  email?: string
   attending: boolean
   plusOne: number
+  alcohol?: string
   comment?: string
 }
 
