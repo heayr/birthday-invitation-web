@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 export class RsvpService {
   static async create(data: {
     name: string;
-    email: string;
+    email?: string;
     attending: boolean;
     plusOne: number;
-    alcohol: data.alcohol,
+    alcohol?: data.alcohol,
     comment?: string;
   }): Promise<Rsvp> {
     const code = this.generateUniqueCode();
@@ -29,11 +29,11 @@ export class RsvpService {
   static async updateByCode(
     code: string,
     data: {
-      name?: string;
+      name: string;
       email?: string;
       attending?: boolean;
       plusOne?: number;
-      alcohol: data.alcohol,
+      alcohol?: data.alcohol,
       comment?: string;
     }
   ): Promise<Rsvp> {
