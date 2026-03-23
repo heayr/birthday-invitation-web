@@ -12,7 +12,7 @@
 # - ./backend/prisma:/app/prisma
 # - birthday-data:/app/prisma/dev.db
 # networks:
-# - traefik-net
+# - proxy
 # labels:
 # - "traefik.enable=true"
 # - "traefik.http.routers.birthday-backend.rule=Host(`birthday.nologs.site`) && PathPrefix(`/api`)"
@@ -25,7 +25,7 @@
 # container_name: birthday-frontend
 # restart: unless-stopped
 # networks:
-# - traefik-net
+# - proxy
 # labels:
 # - "traefik.enable=true"
 # - "traefik.http.routers.birthday-frontend.rule=Host(`birthday.nologs.site`)"
@@ -35,7 +35,7 @@
 # birthday-data:
 
 # networks:
-# traefik-net:
+# proxy:
 # external: true
 
 
