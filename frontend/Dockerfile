@@ -1,17 +1,25 @@
-# frontend/Dockerfile
-
-# Этап сборки
+# Этап 1: сборка React-приложения
 FROM node:20-alpine AS builder
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production=false
+
+# Копируем package.json и устанавливаем зависимости
+COPY package.json package-lock.json* yarn.lock* ./
+RUN npm ci
+
+# Копируем исходный код и собираем приложение
 COPY . .
 RUN npm run build
 
-# Этап раздачи статики через nginx
+# Этап 2: nginx для отдачи статики
 FROM nginx:alpine
+
+# Копируем собранные файлы из предыдущего этапа
 COPY --from=builder /app/dist /usr/share/nginx/html
-# Если у вас есть кастомный nginx.conf, скопируйте его (см. ниже)
+
+# Копируем кастомную конфигурацию nginx (SPA-роутинг)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

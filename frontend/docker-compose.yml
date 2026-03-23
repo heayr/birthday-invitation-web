@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: .
+    container_name: birthday-frontend
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.birthday-frontend.rule=Host(`birthday.nologs.site`)"
+      # Указываем entrypoint, который слушает Traefik (может быть websecure для HTTPS)
+      - "traefik.http.routers.birthday-frontend.entrypoints=websecure"
+      - "traefik.http.routers.birthday-frontend.tls=true"
+      - "traefik.http.routers.birthday-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.birthday-frontend.loadbalancer.server.port=80"
+
+networks:
+  proxy:
+    external: true
