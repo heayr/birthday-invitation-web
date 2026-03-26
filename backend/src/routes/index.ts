@@ -14,16 +14,18 @@ const router = Router();
 
 const adminController = new AdminController();
 
-// === Публичные / гостевые роуты ===
-router.post('/', createRsvp);
-router.get('/:code', getRsvpByCode);
-router.patch('/:code', updateRsvp);
-
 // === Админские роуты (защищённые Basic Auth) ===
 router.get(
   '/admin/all',
   adminAuth,
   adminController.getAllResponses.bind(adminController)
 );
+
+// === Публичные / гостевые роуты ===
+router.post('/', createRsvp);
+router.get('/:code', getRsvpByCode);
+router.patch('/:code', updateRsvp);
+
+
 
 export default router;

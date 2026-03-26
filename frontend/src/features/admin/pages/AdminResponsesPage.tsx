@@ -3,6 +3,8 @@ import { useState, ChangeEvent } from 'react';
 import { useAdminResponses } from '../hooks/useAdminResponses';
 import { ResponsesTable } from '../components/ResponsesTable';
 
+
+
 export default function AdminResponsesPage() {
   const {
     responses,
@@ -43,7 +45,7 @@ export default function AdminResponsesPage() {
 
         {/* Фильтры */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             {/* Поиск */}
             <div className="flex-1">
               <div className="relative">
