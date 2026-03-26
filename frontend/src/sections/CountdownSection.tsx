@@ -1,5 +1,6 @@
 // src/sections/CountdownSection.tsx
-import { Countdown } from "@/components/Countdown";
+import { Countdown } from "../components/CountDown";
+// import { Countdown } from "@/components/Countdown";
 import { cn } from "@/lib/cn";
 import "./../styles/components/CountdownSection.css";
 

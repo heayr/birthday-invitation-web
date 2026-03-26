@@ -1,25 +1,35 @@
-# Этап 1: сборка React-приложения
-FROM node:20-alpine AS builder
+# ---------- FRONTEND DOCKERFILE ----------
+FROM node:20-bullseye AS builder
 
 WORKDIR /app
 
-# Копируем package.json и устанавливаем зависимости
-COPY package.json package-lock.json* yarn.lock* ./
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
 RUN npm ci
 
-# Копируем исходный код и собираем приложение
+# Копируем все исходники
 COPY . .
+
+# Собираем проект Vite
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL:-/api}
+
 RUN npm run build
 
-# Этап 2: nginx для отдачи статики
-FROM nginx:alpine
+# ---------- RUNTIME ----------
+FROM node:20-bullseye
 
-# Копируем собранные файлы из предыдущего этапа
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Копируем кастомную конфигурацию nginx (SPA-роутинг)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Устанавливаем serve для отдачи фронтенда
+RUN npm install -g serve
+
+# Копируем сборку
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Запуск фронтенда
+CMD ["serve", "-s", "dist", "-l", "80"]

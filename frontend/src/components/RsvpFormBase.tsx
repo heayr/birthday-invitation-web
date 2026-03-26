@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import "./../styles/components/RsvpFormBase.css";
 
 const rsvpSchema = z.object({
@@ -33,7 +33,7 @@ interface RsvpFormBaseProps {
   errorMessage?: string;
   submitLabel: string;
   onCancel?: () => void;
-  showSuccess?: boolean;
+  // showSuccess?: boolean;
 }
 
 export function RsvpFormBase({
@@ -44,7 +44,7 @@ export function RsvpFormBase({
   errorMessage,
   submitLabel,
   onCancel,
-  showSuccess = false,
+  // showSuccess = false,
 }: RsvpFormBaseProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(rsvpSchema),

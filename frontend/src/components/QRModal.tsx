@@ -43,7 +43,7 @@ export default function QRModal({
         "Кафе «Золотой Ключик», просп. Героев, 36/2, Балаково, ТЦ Айсберг",
       startDate: new Date("2026-05-30T17:00:00+04:00"),
       endDate: new Date("2026-05-30T23:00:00+04:00"),
-      organizerName: "Организаторы юбилея",
+      // organizerName: "Организаторы юбилея",
     });
     downloadICS(icsContent, "jubilee-vitaliy-2026.ics");
   };

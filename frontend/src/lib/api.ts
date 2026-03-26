@@ -1,12 +1,21 @@
 import axios, { AxiosError } from "axios"
 
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
+//   // baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/rsvp", когда делаем локально разработку - используем localhost 
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   timeout: 10000,
+// })
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/rsvp",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://api.birthday.nologs.site",
+  headers: { "Content-Type": "application/json" },
   timeout: 10000,
 })
+
+
 
 export interface RsvpRequest {
   name: string
@@ -19,7 +28,7 @@ export interface RsvpRequest {
 
 export interface RsvpResponse {
   success: boolean
-  code?: string          // #XXXXXXX
+  code?: string
   message?: string
   data?: RsvpRequest & {
     id: number
@@ -32,7 +41,7 @@ export interface RsvpResponse {
 
 export const submitRsvp = async (data: RsvpRequest): Promise<RsvpResponse> => {
   try {
-    const res = await api.post<RsvpResponse>("/", data)
+    const res = await api.post<RsvpResponse>("/rsvp", data)
     return res.data
   } catch (err) {
     if (err instanceof AxiosError && err.response?.data) {
@@ -42,27 +51,54 @@ export const submitRsvp = async (data: RsvpRequest): Promise<RsvpResponse> => {
   }
 }
 
+// export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
+//   try {
+//     // const cleanCode = code.startsWith('#') ? code.slice(1) : code
+//     const res = await api.get<RsvpResponse>(`/rsvp${code}`);
+//     return res.data
+//   } catch (err) {
+//     if (err instanceof AxiosError) {
+//       if (err.response?.status === 404) {
+//         throw new Error("Код не найден")
+//       }
+//     }
+//     throw new Error("Ошибка при загрузке данных")
+//   }
+// }
+
 export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
   try {
-    // const cleanCode = code.startsWith('#') ? code.slice(1) : code
-    const res = await api.get<RsvpResponse>(`/${code}`);
-    return res.data
+    const res = await api.get<RsvpResponse>(`/rsvp/${encodeURIComponent(code)}`);
+    return res.data;
   } catch (err) {
     if (err instanceof AxiosError) {
       if (err.response?.status === 404) {
-        throw new Error("Код не найден")
+        throw new Error("Код не найден");
       }
     }
-    throw new Error("Ошибка при загрузке данных")
+    throw new Error("Ошибка при загрузке данных");
   }
 }
 
+
+// export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Promise<RsvpResponse> => {
+//   try {
+//     // const cleanCode = code.startsWith('#') ? code.slice(1) : code
+//     const res = await api.patch<RsvpResponse>(`/rsvp${code}`, data);
+//     return res.data
+//   } catch (err) {
+//     throw new Error("Не удалось обновить ответ")
+//   }
+// }
+
 export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Promise<RsvpResponse> => {
   try {
-    // const cleanCode = code.startsWith('#') ? code.slice(1) : code
-    const res = await api.patch<RsvpResponse>(`/${code}`, data);
-    return res.data
+    const res = await api.patch<RsvpResponse>(`/rsvp/${encodeURIComponent(code)}`, data);
+    return res.data;
   } catch (err) {
-    throw new Error("Не удалось обновить ответ")
+    if (err instanceof AxiosError && err.response?.data) {
+      throw err.response.data as RsvpResponse;
+    }
+    throw new Error("Не удалось обновить ответ");
   }
 }

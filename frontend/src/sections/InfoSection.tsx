@@ -16,7 +16,7 @@ export function InfoSection() {
                 <div className="info-icon-wrapper">
                   <Calendar aria-hidden="true" />
                 </div>
-                <h3 className="info-card-title">Дата и время</h3>
+                <h3 className="info-card-title">Дата и время проведения события</h3>
               </div>
               <div className="info-card-content">
                 <p className="info-main-text">30 мая 2026</p>
@@ -50,8 +50,8 @@ export function InfoSection() {
                 <h3 className="info-card-title">Дресс-код</h3>
               </div>
               <div className="info-card-content">
-                <p className="info-main-text">Уточняется</p>
-                <p className="info-sub-text">Будет объявлено позже</p>
+                <p className="info-main-text">Удобная одежда</p>
+                <p className="info-sub-text">Для веселого времяпрепровождения</p>
               </div>
             </div>
 

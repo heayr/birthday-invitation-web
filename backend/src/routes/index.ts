@@ -1,3 +1,5 @@
+// routes/index.ts
+
 import { Router } from 'express';
 import {
   createRsvp,

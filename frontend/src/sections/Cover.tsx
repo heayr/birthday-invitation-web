@@ -1,5 +1,5 @@
 // src/sections/Cover.tsx
-import { cn } from "@/lib/cn";
+// import { cn } from "@/lib/cn";
 import "./../styles/components/Cover.css";
 
 export function Cover() {
@@ -12,7 +12,7 @@ export function Cover() {
       {/* Фоновое изображение */}
       <div className="cover-image" />
       <div className="cover-content">
-        <h1 className="cover-title">Приглашение на юбилей</h1>
+        <h1 className="cover-title">Приглашение на юбилей Витали</h1>
 
         <p className="cover-subtitle">45 лет</p>
 

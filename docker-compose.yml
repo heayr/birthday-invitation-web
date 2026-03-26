@@ -6,30 +6,35 @@ services:
     container_name: birthday-backend
     restart: unless-stopped
     environment:
-      - NODE_ENV=production
-      - ADMIN_PASSWORD=65ad65mi89n
+      NODE_ENV: production
+      ADMIN_PASSWORD: 65ad65mi89n
     volumes:
-      # Том для SQLite (если используете SQLite)
-      - birthday-data:/app/prisma/dev.db
-      # Если нужно подключать live-миграции – раскомментируйте:
-      # - ./backend/prisma:/app/prisma
+      - ./backend/prisma:/app/prisma   # База + схема
+      - ./backend/prisma/data:/app/prisma/data
     networks:
       - proxy
+    ports:
+      - "3001:3001"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.birthday-backend.rule=Host(`birthday.nologs.site`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.birthday-backend.middlewares=birthday-backend-stripprefix"
-      - "traefik.http.middlewares.birthday-backend-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.birthday-backend.rule=Host(`birthday.nologs.site`) && (PathPrefix(`/api`) || PathPrefix(`/rsvp`))"
+      - "traefik.http.routers.birthday-backend.entrypoints=websecure"
+      - "traefik.http.routers.birthday-backend.middlewares=birthday-backend-stripprefix@file"
       - "traefik.http.services.birthday-backend.loadbalancer.server.port=3001"
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: https://api.birthday.nologs.site
     container_name: birthday-frontend
     restart: unless-stopped
     networks:
       - proxy
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.birthday-frontend.tls=true"
+      - "traefik.http.routers.birthday-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.birthday-frontend.rule=Host(`birthday.nologs.site`)"
       - "traefik.http.services.birthday-frontend.loadbalancer.server.port=80"
 
