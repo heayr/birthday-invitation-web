@@ -102,3 +102,66 @@ export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Prom
     throw new Error("Не удалось обновить ответ");
   }
 }
+
+
+// ==================== ADMIN API ====================
+
+export interface AdminRsvp {
+  id: number;
+  code: string;
+  name: string;
+  email: string | null;
+  attending: boolean;
+  plusOne: number;
+  alcohol: string | null;
+  comment: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminResponsesResponse {
+  success: boolean;
+  data: AdminRsvp[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export const adminApi = {
+  /** Получить список всех ответов (для админки) */
+  getResponses: async (params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    attending?: boolean;
+  } = {}): Promise<AdminResponsesResponse> => {
+    const queryParams = new URLSearchParams();
+
+    if (params.page !== undefined) queryParams.set('page', params.page.toString());
+    if (params.limit !== undefined) queryParams.set('limit', params.limit.toString());
+    if (params.search?.trim()) queryParams.set('search', params.search.trim());
+    if (params.attending !== undefined) queryParams.set('attending', params.attending.toString());
+
+    try {
+      const response = await api.get<AdminResponsesResponse>(
+        `/rsvp/admin/all?${queryParams.toString()}`,
+        {
+          // Basic Auth для админки
+          auth: {
+            username: 'admin',
+            password: import.meta.env.VITE_ADMIN_PASSWORD || '',
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      if (err instanceof AxiosError && err.response?.data) {
+        throw err.response.data;
+      }
+      throw new Error('Не удалось загрузить ответы гостей');
+    }
+  },
+};

@@ -35,7 +35,7 @@ const app = express();
 app.use(cors({
   origin: "https://birthday.nologs.site",
   methods: ["GET", "POST", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 

@@ -6,6 +6,7 @@ import { Cover } from "@/sections/Cover";
 import { CountdownSection } from "@/sections/CountdownSection";
 import { InfoSection } from "@/sections/InfoSection";
 import { RsvpForm } from "@/sections/RsvpForm";
+import AdminResponsesPage from './features/admin/pages/AdminResponsesPage';
 
 // Страницы
 import EditPage from "@/pages/EditPage";
@@ -56,6 +57,8 @@ export default function App() {
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
+          {/* ADMIN PANEL */}
+        <Route path="/admin" element={<AdminResponsesPage />} />
       </Routes>
     </div>
   );
