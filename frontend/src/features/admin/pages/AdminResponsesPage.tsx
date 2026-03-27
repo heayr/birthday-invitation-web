@@ -1,8 +1,8 @@
 // frontend/src/features/admin/pages/AdminResponsesPage.tsx
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { useAdminResponses } from '../hooks/useAdminResponses';
 import { ResponsesTable } from '../components/ResponsesTable';
-
+import '../admin.css';
 
 
 export default function AdminResponsesPage() {
@@ -18,6 +18,35 @@ export default function AdminResponsesPage() {
 
   const [searchValue, setSearchValue] = useState(filters.search);
 
+  // Управление темой (оставляем как было)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('adminTheme');
+    if (savedTheme === 'dark') {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    } else if (savedTheme === 'light') {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(systemDark ? 'dark' : 'light');
+      if (systemDark) document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('adminTheme', newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   const handleSearch = () => {
     updateFilters({ search: searchValue });
   };
@@ -31,77 +60,54 @@ export default function AdminResponsesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="admin-page">
+      <div className="admin-container">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            Админ-панель
-          </h1>
-          <p className="mt-3 text-xl text-gray-600">
-            Ответы гостей • Всего найдено: <span className="font-semibold text-gray-900">{pagination?.total || 0}</span>
+        <div className="admin-header">
+          <h1>Админ-панель</h1>
+          <p>
+            Ответы гостей • Всего найдено:{" "}
+            <span className="font-semibold">{pagination?.total || 0}</span>
           </p>
+          <button onClick={toggleTheme} className="theme-toggle">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
         </div>
 
         {/* Фильтры */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-            {/* Поиск */}
-            <div className="flex-1">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Поиск по имени или email..."
-                  value={searchValue}
-                  onChange={handleSearchChange}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  className="w-full px-5 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-base"
-                />
-              </div>
-            </div>
+        <div className="admin-filters">
+          <input
+            type="text"
+            placeholder="Поиск по имени или email..."
+            value={searchValue}
+            onChange={handleSearchChange}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="admin-search-input"
+          />
 
+          <button onClick={handleSearch} className="admin-btn admin-btn-primary">
+            Найти
+          </button>
+
+          <div className="admin-filter-group">
             <button
-              onClick={handleSearch}
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors whitespace-nowrap"
+              onClick={() => handleAttendingFilter(undefined)}
+              className={`admin-filter-btn ${filters.attending === undefined ? 'active' : ''}`}
             >
-              Найти
+              Все
             </button>
-
-            {/* Фильтр по статусу */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleAttendingFilter(undefined)}
-                className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                  filters.attending === undefined
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-white border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Все
-              </button>
-
-              <button
-                onClick={() => handleAttendingFilter(true)}
-                className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                  filters.attending === true
-                    ? 'bg-green-600 text-white'
-                    : 'bg-white border border-gray-300 hover:bg-gray-50 text-green-700'
-                }`}
-              >
-                Будет
-              </button>
-
-              <button
-                onClick={() => handleAttendingFilter(false)}
-                className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                  filters.attending === false
-                    ? 'bg-red-600 text-white'
-                    : 'bg-white border border-gray-300 hover:bg-gray-50 text-red-700'
-                }`}
-              >
-                Не будет
-              </button>
-            </div>
+            <button
+              onClick={() => handleAttendingFilter(true)}
+              className={`admin-filter-btn ${filters.attending === true ? 'active' : ''}`}
+            >
+              Будет
+            </button>
+            <button
+              onClick={() => handleAttendingFilter(false)}
+              className={`admin-filter-btn ${filters.attending === false ? 'active' : ''}`}
+            >
+              Не будет
+            </button>
           </div>
         </div>
 
@@ -112,23 +118,21 @@ export default function AdminResponsesPage() {
 
         {/* Пагинация */}
         {pagination && pagination.totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4">
+          <div className="pagination">
             <button
               onClick={() => changePage(filters.page - 1)}
               disabled={filters.page === 1}
-              className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 font-medium"
             >
               ← Назад
             </button>
 
-            <div className="px-8 py-3 bg-white border border-gray-200 rounded-xl text-sm">
-              Страница <span className="font-semibold">{filters.page}</span> из {pagination.totalPages}
+            <div className="pagination-info">
+              Страница <strong>{filters.page}</strong> из {pagination.totalPages}
             </div>
 
             <button
               onClick={() => changePage(filters.page + 1)}
               disabled={filters.page === pagination.totalPages}
-              className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 font-medium"
             >
               Вперед →
             </button>
@@ -136,7 +140,7 @@ export default function AdminResponsesPage() {
         )}
 
         {error && (
-          <div className="mt-8 p-5 bg-red-50 border border-red-200 text-red-700 rounded-2xl">
+          <div className="error-message">
             {error}
           </div>
         )}

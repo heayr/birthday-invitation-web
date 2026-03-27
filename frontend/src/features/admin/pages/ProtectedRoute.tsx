@@ -1,9 +1,10 @@
 // src/components/ProtectedRoute.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Base64 } from "js-base64";
+import '../admin.css';
 
 interface ProtectedRouteProps {
-  children: React.ReactNode; // <- меняем JSX.Element на React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
@@ -12,12 +13,27 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Поддержка тёмной темы
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("adminTheme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  }, []);
+
   const handleLogin = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // Проверяем пароль через бэкенд
       const headers = {
         Authorization: `Basic ${Base64.encode(`admin:${password}`)}`,
       };
@@ -37,29 +53,40 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     }
   };
 
-  if (authenticated) return children;
+  // Если пользователь авторизован — показываем детей (админ-панель)
+  if (authenticated) {
+    return <>{children}</>;
+  }
 
+  // Форма входа
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-6">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Введите пароль для доступа
-        </h2>
+    <div className="login-page">
+      <div className="login-card">
+        <h2>Доступ к админ-панели</h2>
+        <p className="login-subtitle">Введите пароль администратора</p>
+
         <input
           type="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="login-input"
+          autoFocus
         />
+
         <button
           onClick={handleLogin}
-          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          disabled={loading}
+          disabled={loading || !password}
+          className="login-button"
         >
           {loading ? "Проверка..." : "Войти"}
         </button>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+
+        {error && <p className="login-error">{error}</p>}
+
+        <p className="login-hint">
+          Пароль хранится только в памяти браузера
+        </p>
       </div>
     </div>
   );
