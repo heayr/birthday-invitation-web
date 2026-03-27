@@ -5,9 +5,10 @@ services:
     build: ./backend
     container_name: birthday-backend
     restart: unless-stopped
+    env_file:
+    - ./backend/.env
     environment:
       NODE_ENV: production
-      ADMIN_PASSWORD: 65ad65mi89n
     volumes:
       - ./backend/prisma:/app/prisma   # База + схема
       - ./backend/prisma/data:/app/prisma/data

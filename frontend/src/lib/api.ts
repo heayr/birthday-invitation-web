@@ -105,7 +105,6 @@ export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Prom
 
 
 // ==================== ADMIN API ====================
-
 export interface AdminRsvp {
   id: number;
   code: string;
@@ -131,7 +130,6 @@ export interface AdminResponsesResponse {
 }
 
 export const adminApi = {
-  /** Получить список всех ответов (для админки) */
   getResponses: async (params: {
     page?: number;
     limit?: number;
@@ -145,14 +143,16 @@ export const adminApi = {
     if (params.search?.trim()) queryParams.set('search', params.search.trim());
     if (params.attending !== undefined) queryParams.set('attending', params.attending.toString());
 
+    // Берём пароль, который ввёл пользователь
+    const savedPassword = localStorage.getItem('adminAuthPassword') ||
+      import.meta.env.VITE_ADMIN_PASSWORD || '';
+
     try {
       const response = await api.get<AdminResponsesResponse>(
         `/rsvp/admin/all?${queryParams.toString()}`,
         {
-          // Basic Auth для админки
-          auth: {
-            username: 'admin',
-            password: import.meta.env.VITE_ADMIN_PASSWORD || '',
+          headers: {
+            Authorization: `Basic ${btoa(`admin:${savedPassword}`)}`,
           },
         }
       );

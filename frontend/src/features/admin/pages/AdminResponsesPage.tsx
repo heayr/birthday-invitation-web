@@ -4,7 +4,6 @@ import { useAdminResponses } from '../hooks/useAdminResponses';
 import { ResponsesTable } from '../components/ResponsesTable';
 import '../admin.css';
 
-
 export default function AdminResponsesPage() {
   const {
     responses,
@@ -17,22 +16,20 @@ export default function AdminResponsesPage() {
   } = useAdminResponses();
 
   const [searchValue, setSearchValue] = useState(filters.search);
-
-  // Управление темой (оставляем как было)
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('adminTheme');
-    if (savedTheme === 'dark') {
-      setTheme('dark');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+
+    setTheme(isDark ? 'dark' : 'light');
+
+    if (isDark) {
       document.documentElement.classList.add('dark');
-    } else if (savedTheme === 'light') {
-      setTheme('light');
-      document.documentElement.classList.remove('dark');
     } else {
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(systemDark ? 'dark' : 'light');
-      if (systemDark) document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -40,6 +37,7 @@ export default function AdminResponsesPage() {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('adminTheme', newTheme);
+
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -47,30 +45,24 @@ export default function AdminResponsesPage() {
     }
   };
 
-  const handleSearch = () => {
-    updateFilters({ search: searchValue });
-  };
-
-  const handleAttendingFilter = (value: boolean | undefined) => {
-    updateFilters({ attending: value });
-  };
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+  const handleSearch = () => updateFilters({ search: searchValue });
+  const handleAttendingFilter = (value: boolean | undefined) => updateFilters({ attending: value });
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value);
 
   return (
     <div className="admin-page">
       <div className="admin-container">
-        {/* Header */}
+        {/* Header с красивой кнопкой */}
         <div className="admin-header">
-          <h1>Админ-панель</h1>
-          <p>
-            Ответы гостей • Всего найдено:{" "}
-            <span className="font-semibold">{pagination?.total || 0}</span>
-          </p>
-          <button onClick={toggleTheme} className="theme-toggle">
-            {theme === 'light' ? '🌙' : '☀️'}
+          <div>
+            <h1>Админ-панель</h1>
+            <p>
+              Ответы гостей • Всего найдено: <span className="admin-total-count">{pagination?.total || 0}</span>
+            </p>
+          </div>
+
+          <button onClick={toggleTheme} className="theme-toggle-btn">
+            {theme === 'light' ? '🌙 Тёмная тема' : '☀️ Светлая тема'}
           </button>
         </div>
 
@@ -111,10 +103,8 @@ export default function AdminResponsesPage() {
           </div>
         </div>
 
-        {/* Таблица */}
-        <div className="mb-10">
-          <ResponsesTable responses={responses} loading={loading} />
-        </div>
+        {/* Только карточки */}
+        <ResponsesTable responses={responses} loading={loading} />
 
         {/* Пагинация */}
         {pagination && pagination.totalPages > 1 && (
@@ -125,11 +115,9 @@ export default function AdminResponsesPage() {
             >
               ← Назад
             </button>
-
             <div className="pagination-info">
               Страница <strong>{filters.page}</strong> из {pagination.totalPages}
             </div>
-
             <button
               onClick={() => changePage(filters.page + 1)}
               disabled={filters.page === pagination.totalPages}
@@ -139,11 +127,7 @@ export default function AdminResponsesPage() {
           </div>
         )}
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );

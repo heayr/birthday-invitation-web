@@ -25,8 +25,27 @@ export default function App() {
               <CountdownSection />
               <InfoSection />
               <RsvpForm />
-              <footer className="py-12 bg-gray-900 text-gray-300 text-center">
+            <footer className="py-12 bg-gray-900 text-gray-300 text-center">
                 <p>С любовью и теплом ❤️</p>
+                <p className="mt-2 text-sm">2026 © Юбилей Виталия</p>
+                <div>
+                  <h4>
+                    Запрограмлено{" "}
+                    <a
+                      target="_blank"
+                      className="text-decoration-none"
+                      href="https://t.me/PotatoChipasu"
+                    >
+                      @PotatoChipasu
+                    </a>
+                  </h4>
+                  <h5>
+                    <a target="_blank" href="https://t.me/No_Logs_app_bot">
+                      Доступ к интернету без ограничений с настроенным VPS
+                      сервером
+                    </a>
+                  </h5>
+                </div>
               </footer>
             </>
           }

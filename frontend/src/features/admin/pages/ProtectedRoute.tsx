@@ -30,28 +30,30 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }, []);
 
   const handleLogin = async () => {
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    try {
-      const headers = {
-        Authorization: `Basic ${Base64.encode(`admin:${password}`)}`,
-      };
+  try {
+    const headers = {
+      Authorization: `Basic ${Base64.encode(`admin:${password}`)}`,
+    };
 
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/rsvp/admin/all?page=1&limit=1`,
-        { headers }
-      );
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/rsvp/admin/all?page=1&limit=1`,
+      { headers }
+    );
 
-      if (!res.ok) throw new Error("Неверный пароль");
+    if (!res.ok) throw new Error("Неверный пароль");
 
-      setAuthenticated(true);
-    } catch (err: any) {
-      setError(err.message || "Ошибка авторизации");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // ← Сохраняем введённый пароль для дальнейших запросов
+    localStorage.setItem('adminAuthPassword', password);
+    setAuthenticated(true);
+  } catch (err: any) {
+    setError(err.message || "Ошибка авторизации");
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Если пользователь авторизован — показываем детей (админ-панель)
   if (authenticated) {
