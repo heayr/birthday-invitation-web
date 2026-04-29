@@ -31,6 +31,9 @@ import rsvpRoutes from './routes';
 
 const app = express();
 
+// За Traefik/прокси берём реальный IP клиента для корректной работы rate limit.
+app.set('trust proxy', 1);
+
 // ✅ НОРМАЛЬНЫЙ CORS ДЛЯ ПРОДА
 app.use(cors({
   origin: "https://birthday.nologs.site",

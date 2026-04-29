@@ -1,6 +1,6 @@
 // src/components/QRModal.tsx
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { generateICS, downloadICS } from "@/lib/ics";
 import { X, LinkIcon, Download, Calendar } from "lucide-react";
 import "../styles/components/QRModal.css";
@@ -18,26 +18,51 @@ export default function QRModal({
   editLink,
   code,
 }: QRModalProps) {
+  const qrRef = useRef<HTMLDivElement>(null);
+
   if (!isOpen) return null;
 
   const handleBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) onClose();
   };
 
-  const downloadQR = (value: string, filename: string) => {
-    const url = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(value)}`;
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Converts the locally-rendered SVG to a PNG and triggers download — no external APIs
+  const downloadQR = (filename: string) => {
+    const svgEl = qrRef.current?.querySelector("svg");
+    if (!svgEl) return;
+
+    const size = 400;
+    const svgData = new XMLSerializer().serializeToString(svgEl);
+    const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d")!;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }, "image/png");
+    };
+
+    img.src = url;
   };
 
   const handleAddToCalendar = () => {
     const icsContent = generateICS({
-      summary: "Юбилей Виталия — 50 лет",
+      summary: "Юбилей Виталия — 45 лет",
       description: `Приглашаем на юбилей Виталия!\n\nКод для редактирования: ${code}\n\nЕсли будут пожелания или изменения — используйте код.`,
       location:
         "Кафе «Золотой Ключик», просп. Героев, 36/2, Балаково, ТЦ Айсберг",
@@ -71,7 +96,7 @@ export default function QRModal({
           {/* QR для редактирования */}
           <div className="qr-section">
             <h3 className="qr-section-title">Изменить ответ позже</h3>
-            <div className="qr-code-container">
+            <div className="qr-code-container" ref={qrRef}>
               <QRCodeSVG
                 value={editLink}
                 size={220}
@@ -90,7 +115,7 @@ export default function QRModal({
                 Скопировать ссылку
               </button>
               <button
-                onClick={() => downloadQR(editLink, `edit-qr-${code}.png`)}
+                onClick={() => downloadQR(`edit-qr-${code}.png`)}
                 className="qr-button qr-button-primary"
               >
                 <Download size={16} />

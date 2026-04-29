@@ -1,14 +1,5 @@
 import axios, { AxiosError } from "axios"
 
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
-//   // baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/rsvp", когда делаем локально разработку - используем localhost 
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   timeout: 10000,
-// })
-
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "https://api.birthday.nologs.site",
   headers: { "Content-Type": "application/json" },
@@ -51,21 +42,6 @@ export const submitRsvp = async (data: RsvpRequest): Promise<RsvpResponse> => {
   }
 }
 
-// export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
-//   try {
-//     // const cleanCode = code.startsWith('#') ? code.slice(1) : code
-//     const res = await api.get<RsvpResponse>(`/rsvp${code}`);
-//     return res.data
-//   } catch (err) {
-//     if (err instanceof AxiosError) {
-//       if (err.response?.status === 404) {
-//         throw new Error("Код не найден")
-//       }
-//     }
-//     throw new Error("Ошибка при загрузке данных")
-//   }
-// }
-
 export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
   try {
     const res = await api.get<RsvpResponse>(`/rsvp/${encodeURIComponent(code)}`);
@@ -79,17 +55,6 @@ export const getRsvpByCode = async (code: string): Promise<RsvpResponse> => {
     throw new Error("Ошибка при загрузке данных");
   }
 }
-
-
-// export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Promise<RsvpResponse> => {
-//   try {
-//     // const cleanCode = code.startsWith('#') ? code.slice(1) : code
-//     const res = await api.patch<RsvpResponse>(`/rsvp${code}`, data);
-//     return res.data
-//   } catch (err) {
-//     throw new Error("Не удалось обновить ответ")
-//   }
-// }
 
 export const updateRsvp = async (code: string, data: Partial<RsvpRequest>): Promise<RsvpResponse> => {
   try {
@@ -143,16 +108,15 @@ export const adminApi = {
     if (params.search?.trim()) queryParams.set('search', params.search.trim());
     if (params.attending !== undefined) queryParams.set('attending', params.attending.toString());
 
-    // Берём пароль, который ввёл пользователь
-    const savedPassword = localStorage.getItem('adminAuthPassword') ||
-      import.meta.env.VITE_ADMIN_PASSWORD || '';
+    // Берём закодированный токен из sessionStorage
+    const savedToken = sessionStorage.getItem('adminAuthToken') || '';
 
     try {
       const response = await api.get<AdminResponsesResponse>(
         `/rsvp/admin/all?${queryParams.toString()}`,
         {
           headers: {
-            Authorization: `Basic ${btoa(`admin:${savedPassword}`)}`,
+            Authorization: `Basic ${savedToken}`,
           },
         }
       );

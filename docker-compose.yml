@@ -18,7 +18,7 @@ services:
       - "3001:3001"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.birthday-backend.rule=Host(`birthday.nologs.site`) && (PathPrefix(`/api`) || PathPrefix(`/rsvp`))"
+      - "traefik.http.routers.birthday-backend.rule=(Host(`birthday.nologs.site`) || Host(`api.birthday.nologs.site`)) && (PathPrefix(`/api`) || PathPrefix(`/rsvp`))"
       - "traefik.http.routers.birthday-backend.entrypoints=websecure"
       - "traefik.http.routers.birthday-backend.middlewares=birthday-backend-stripprefix@file"
       - "traefik.http.services.birthday-backend.loadbalancer.server.port=3001"
